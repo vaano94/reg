@@ -1,8 +1,10 @@
-package com.example;
+package com.example.Entity;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -10,17 +12,25 @@ import javax.validation.constraints.Size;
 /**
  * Created by ivan on 03/06/16.
  */
+@Entity
 public class User {
 
     @NotNull
     @NotBlank
     @Email
+    @Column
     private String email;
+
+    @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
     @NotNull
     @NotBlank
     @Size(min = 6, max = 12)
     @Pattern(regexp = "^(?=.*[!])(?=(.*\\d){2}).*$", message = "Password code validation failed.")
+    @Column
     private String password;
 
     private boolean isConfirmed;
@@ -47,5 +57,13 @@ public class User {
 
     public void setConfirmed(boolean confirmed) {
         isConfirmed = confirmed;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

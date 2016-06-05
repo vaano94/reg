@@ -1,5 +1,7 @@
-package com.example;
+package com.example.App;
 
+import com.example.Services.PersonService;
+import com.example.Entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,7 @@ public class RegController {
         return "index";
     };
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="/", method = RequestMethod.POST)
     public String validateFields(User user) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
@@ -39,6 +41,9 @@ public class RegController {
 
             System.out.println(user.getEmail());
             System.out.println(user.getPassword());
+            user.setConfirmed(false);
+            PersonService personService = new PersonService();
+            System.out.println("Adding user into database" +  personService.addUser(user));
         }
 
         return "/index";
