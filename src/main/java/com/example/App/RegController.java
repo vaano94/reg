@@ -1,9 +1,13 @@
 package com.example.App;
 
-import com.example.Services.PersonService;
 import com.example.Entity.User;
+import com.example.Messaging.Publisher;
+import com.example.Service.UserService;
+import com.example.Service.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -20,11 +24,14 @@ import java.util.Set;
 public class RegController {
     private Validator validator;
 
+    @Autowired
+    UserService userService;
+
     @RequestMapping("/index")
-    public String redirect(Model model) {
+    public String index(Model model) {
         model.addAttribute("user", new User());
         return "index";
-    };
+    }
 
     @RequestMapping(value="/", method = RequestMethod.POST)
     public String validateFields(User user) {
@@ -39,14 +46,28 @@ public class RegController {
         }
         else {
 
-            System.out.println(user.getEmail());
-            System.out.println(user.getPassword());
-            user.setConfirmed(false);
-            PersonService personService = new PersonService();
-            System.out.println("Adding user into database" +  personService.addUser(user));
+                userService.publishMessage(user);
+                System.out.println(user.getEmail());
+                System.out.println(user.getPassword());
+                user.setConfirmed(false);
+
         }
 
         return "/index";
     }
+
+    @RequestMapping(
+            value = "/confirm/{link}",
+            method = RequestMethod.GET
+    )
+    public String confirm(@PathVariable String link) {
+        UserServiceImpl userServiceImpl = new UserServiceImpl();
+        boolean isConfirmed = userServiceImpl.confirmEmail(link);
+        if (isConfirmed) {
+            return "success";
+        }
+        else return "index";
+    }
+
 
 }

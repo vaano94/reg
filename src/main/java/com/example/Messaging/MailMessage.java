@@ -11,20 +11,19 @@ public class MailMessage implements Serializable {
 
     private static final long serialVersionUID = -3679304901044035566L;
 
-    private String sender;
+    private String author;
+    private String recipient;
     private String replyTo;
-    private List<String> toList = new ArrayList<>();
-    private List<String> ccList = new ArrayList<>();
-    private List<String> bccList = new ArrayList<>();
     private String subject;
     private String body;
+    private String passfield;
 
-    public String getSender() {
-        return sender;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setRecipient(String sender) {
+        this.recipient = recipient;
     }
 
     public String getReplyTo() {
@@ -33,30 +32,6 @@ public class MailMessage implements Serializable {
 
     public void setReplyTo(String replyTo) {
         this.replyTo = replyTo;
-    }
-
-    public List<String> getToList() {
-        return toList;
-    }
-
-    public void setToList(List<String> toList) {
-        this.toList = toList;
-    }
-
-    public List<String> getCcList() {
-        return ccList;
-    }
-
-    public void setCcList(List<String> ccList) {
-        this.ccList = ccList;
-    }
-
-    public List<String> getBccList() {
-        return bccList;
-    }
-
-    public void setBccList(List<String> bccList) {
-        this.bccList = bccList;
     }
 
     public String getSubject() {
@@ -73,5 +48,21 @@ public class MailMessage implements Serializable {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getPassfield() {
+        return passfield;
+    }
+
+    public void setPassfield(String passfield) {
+        this.passfield = passfield;
     }
 }
