@@ -57,6 +57,9 @@ public class DBtest {
         }
         assertEquals(count,1);
 
+        User fetchedByMail = userRepository.findUserByEmail(user.getEmail());
+        assertEquals(fetchedByMail.getEmail(),user.getEmail());
+
 
     }
 
