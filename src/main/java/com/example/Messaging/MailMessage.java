@@ -22,7 +22,7 @@ public class MailMessage implements Serializable {
         return recipient;
     }
 
-    public void setRecipient(String sender) {
+    public void setRecipient(String recipient) {
         this.recipient = recipient;
     }
 

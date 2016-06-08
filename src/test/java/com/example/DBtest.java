@@ -40,6 +40,9 @@ public class DBtest {
         User fetchedUser = userRepository.findOne(user.getId());
         assertNotNull(fetchedUser);
 
+        User userByEmail = userRepository.findUserByEmail("blah@blah.com");
+        System.out.println("Fetched user by email: "+userByEmail.getEmail());
+
         //update description and save
         fetchedUser.setConfirmed(true);
         userRepository.save(fetchedUser);

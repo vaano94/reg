@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUser(User user) {
-        User fetchedUser = findById(user.getId());
+        User fetchedUser = userRepository.findUserByEmail(user.getEmail());
         fetchedUser.setConfirmed(true);
         fetchedUser = userRepository.save(fetchedUser);
         return fetchedUser != null;
@@ -42,10 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean confirmEmail(String link) {
         String encodedLink = new String(Base64Utils.decode(link.getBytes()));
-        String email = encodedLink.split("|")[1];
-        Integer id = Integer.valueOf(encodedLink.split("|")[2]);
-        User fetchedUser = findById(id);
+        String email = encodedLink.split("\\|")[1];
+        //Integer id = Integer.valueOf(encodedLink.split("\\|")[2]);
+        User fetchedUser = userRepository.findUserByEmail(email);
         boolean isUpdated =  updateUser(fetchedUser);
+        System.out.println("is Updated expected: true, returned: " + isUpdated);
         return isUpdated;
     }
 
@@ -56,6 +57,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void publishMessage(User user) {
+        userRepository.save(user);
+        System.out.println("User id: " + user.getId());
         publisher.publishMessage(user);
     }
 

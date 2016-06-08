@@ -1,6 +1,10 @@
 package com.example.Messaging;
 
+import com.example.Entity.User;
 import com.example.RegApplication;
+import com.example.Service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
 
 import javax.crypto.SecretKey;
@@ -11,13 +15,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-
+@Component
 public class SendHTMLEmail {
+
+    @Autowired
+    UserService userService;
 
     private static InputStream input = null;
     private SecretKey key;
 
-    public static void sendMessage(MailMessage message)  {
+    public void sendMessage(MailMessage message, User user)  {
 
         // Recipient's email ID needs to be mentioned.
         String recipient = message.getRecipient();
@@ -66,26 +73,27 @@ public class SendHTMLEmail {
 
             // Set To: header field of the header.
             mail.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse("vaano94@gmail.com"));
+                    InternetAddress.parse(message.getRecipient()));
 
             // Set Subject: header field
             mail.setSubject("3MonthJavaJunior");
             // Encrypt user email
             // get Encoded string
-            String encryptedEmail = Base64Utils.encodeToString((message.getPassfield()+"|"+message.getRecipient()).getBytes());
-
+            String encryptedEmail = userService.createConfirmationLink(user);
+            System.out.println("conflink: "+encryptedEmail);
             String link = "\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\"";
 
             // Send the actual HTML message, as big as you like
             mail.setContent(
                     "<h3>You have successfully created an account on our website </h3>"+
-                    "<h4>Your email is: +"+message.getRecipient()+"</h4>"+
-                    "<h4>and your pass ends on"+message.getPassfield()+"</h4>"+
-                    "<p>To confirm your account please follow this link:<a href=localhost:8080/confirm/|"+encryptedEmail+"</a>Click me</p>",
+                    "<h4>Your email is: "+message.getRecipient()+"</h4>"+
+                    "<h4>and your pass ends on"+"********"+user.getPassword().substring(user.getPassword().length()-2)+"</h4>"+
+                    "<p>To confirm your account please follow this link:<a href=\"http://localhost:8080/confirm/"+encryptedEmail+"\">Click me</a></p>",
 
                     "text/html");
 
             // Send message
+            System.out.println(mail.getContent());
             Transport.send(mail);
 
             System.out.println("Sent message successfully....");
@@ -94,6 +102,8 @@ public class SendHTMLEmail {
             System.out.println("Something went wrong when sending message");
             e.printStackTrace();
             throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

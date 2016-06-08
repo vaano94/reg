@@ -18,6 +18,9 @@ public class Receiver {
     @Autowired
     ConfigurableApplicationContext context;
 
+    @Autowired
+    SendHTMLEmail emailComposer;
+
     /**
      * When receive a message, send email to user
      */
@@ -29,13 +32,8 @@ public class Receiver {
         mailMessage.setAuthor("vaano94@gmail.com");
         mailMessage.setRecipient(user.getEmail());
         System.out.println("EMAIL TO SEND: " + user.getEmail());
-
-        String codedPass = user.getPassword();
-        for (int i = 0; i < codedPass.length()-2; i++) {
-            codedPass=codedPass.replace(codedPass.charAt(i),'*');
-        }
-        mailMessage.setPassfield(codedPass);
-        //SendHTMLEmail.sendMessage(mailMessage);
+        mailMessage.setPassfield(user.getPassword());
+        emailComposer.sendMessage(mailMessage, user);
 
     }
 }

@@ -1,7 +1,6 @@
-package com.example.App;
+package com.example.Controller;
 
 import com.example.Entity.User;
-import com.example.Messaging.Publisher;
 import com.example.Service.UserService;
 import com.example.Service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class RegController {
                 System.out.println(user.getEmail());
                 System.out.println(user.getPassword());
                 user.setConfirmed(false);
-
+                return "/ok";
         }
 
         return "/index";
@@ -61,12 +60,13 @@ public class RegController {
             method = RequestMethod.GET
     )
     public String confirm(@PathVariable String link) {
-        UserServiceImpl userServiceImpl = new UserServiceImpl();
-        boolean isConfirmed = userServiceImpl.confirmEmail(link);
+
+        System.out.println(link);
+        boolean isConfirmed = userService.confirmEmail(link);
         if (isConfirmed) {
-            return "success";
+            return "/success";
         }
-        else return "index";
+        else return "/index";
     }
 
 

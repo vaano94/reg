@@ -425,3 +425,10 @@ td,
 th {
   padding: 0;
 }
+
+#signup_form_div {
+  display: block;
+  margin: 0 auto;
+  background-color: rgba(221, 221, 221, 0.57);
+  border-radius: 3px;
+}

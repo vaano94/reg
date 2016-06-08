@@ -11,19 +11,23 @@
     <script src="../js/mine.js" th:href="@{js/mine.js}"></script>
 </head>
 <body>
-<a class="button" id="button_id">CLick me</a>
+<a class="button" id="button_id" style="float: right">CLick me</a>
 <div id="signup_form_div">
-    <form action="#" th:action="@{/}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/}" th:object="${user}" method="post" >
         <div class="row">
-            <div class="six columns">
+            <div class="four columns">
                 <label for="nameInput">Your email</label>
                 <input class="u-full-width" th:field="*{email}" type="email" placeholder="email" id="nameInput"></input>
             </div>
-            <div class="six columns">
+        </div>
+        <div class="row">
+            <div class="four columns">
                 <label for="emailInput">Your password</label>
                 <input class="u-full-width" th:field="*{password}" type="password" placeholder="password" id="emailInput"></input>
             </div>
-            <input class="button-primary" type="submit">Create my account</input>
+        </div>
+        <div class="row">
+            <input class="button-primary" type="submit" value="GO"></input>
         </div>
     </form>
 </div>
