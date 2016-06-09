@@ -5,25 +5,40 @@ import com.example.RegApplication;
 import com.example.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
 
-import javax.crypto.SecretKey;
-import javax.mail.*;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import javax.mail.Transport;
 
+/**
+ * Class responsible for composing html email and sending it to user.
+ */
 @Component
 public class SendHTMLEmail {
 
+    /**
+     * Autowired instance of userService field.
+     */
     @Autowired
-    UserService userService;
-
+    private UserService userService;
+    /**
+     * inputStream to read properties file.
+     */
     private static InputStream input = null;
-    private SecretKey key;
 
+    /**
+     * Main method responsible for sending a message.
+     * Requires user and mail
+     * @param message Message composed on a previous step.
+     * @param user User sent from {@link Receiver} class
+     */
     public void sendMessage(MailMessage message, User user)  {
 
         // Recipient's email ID needs to be mentioned.
@@ -35,7 +50,7 @@ public class SendHTMLEmail {
         Properties prop = new Properties();
         String filename = "mail.properties";
         input = RegApplication.class.getClassLoader().getResourceAsStream(filename);
-        if(input==null){
+        if (input == null) {
             System.out.println("Sorry, unable to find " + filename);
             return;
         }
@@ -69,7 +84,11 @@ public class SendHTMLEmail {
             Message mail = new MimeMessage(session);
 
             // Set From: header field of the header.
-            mail.setFrom(new InternetAddress(author));
+            try {
+                mail.setFrom(new InternetAddress(author));
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
 
             // Set To: header field of the header.
             mail.setRecipients(Message.RecipientType.TO,
@@ -80,20 +99,20 @@ public class SendHTMLEmail {
             // Encrypt user email
             // get Encoded string
             String encryptedEmail = userService.createConfirmationLink(user);
-            System.out.println("conflink: "+encryptedEmail);
             String link = "\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\"";
 
             // Send the actual HTML message, as big as you like
             mail.setContent(
-                    "<h3>You have successfully created an account on our website </h3>"+
-                    "<h4>Your email is: "+message.getRecipient()+"</h4>"+
-                    "<h4>and your pass ends on"+"********"+user.getPassword().substring(user.getPassword().length()-2)+"</h4>"+
-                    "<p>To confirm your account please follow this link:<a href=\"http://localhost:8080/confirm/"+encryptedEmail+"\">Click me</a></p>",
-
+                    "<h3>You have successfully created an account on our website </h3>"
+                    + "<h4>Your email is: " + message.getRecipient() + "</h4>"
+                    + "<h4>and your pass ends on" + "********"
+                    + user.getPassword().substring(user.getPassword().length() - 2) + "</h4>"
+                    + "<p>To confirm your account please follow this link:"
+                    + "<a href=\"http://localhost:8080/confirm/" + encryptedEmail + "\">Click me</a>"
+                    + "</p>",
                     "text/html");
 
             // Send message
-            System.out.println(mail.getContent());
             Transport.send(mail);
 
             System.out.println("Sent message successfully....");
@@ -102,16 +121,7 @@ public class SendHTMLEmail {
             System.out.println("Something went wrong when sending message");
             e.printStackTrace();
             throw new RuntimeException(e);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public SecretKey getKey() {
-        return key;
-    }
-
-    public void setKey(SecretKey key) {
-        this.key = key;
-    }
 }

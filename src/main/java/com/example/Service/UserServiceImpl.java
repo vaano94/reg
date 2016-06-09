@@ -4,17 +4,28 @@ import com.example.Entity.User;
 import com.example.Messaging.Publisher;
 import com.example.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 
+/**
+ * Service to react with User interactions - crud data and confirmations.
+ */
 @Service
 public class UserServiceImpl implements UserService {
+    /**
+     * User repository field.
+     */
     private UserRepository userRepository;
-
+    /**
+     * Autowired ActiveMQ connected Publisher.
+     */
     @Autowired
     private Publisher publisher;
 
+    /**
+     * Sets user repository.
+     * @param userRepository userRepository UserRepository
+     */
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -43,22 +54,19 @@ public class UserServiceImpl implements UserService {
     public boolean confirmEmail(String link) {
         String encodedLink = new String(Base64Utils.decode(link.getBytes()));
         String email = encodedLink.split("\\|")[1];
-        //Integer id = Integer.valueOf(encodedLink.split("\\|")[2]);
         User fetchedUser = userRepository.findUserByEmail(email);
         boolean isUpdated =  updateUser(fetchedUser);
-        System.out.println("is Updated expected: true, returned: " + isUpdated);
         return isUpdated;
     }
 
     @Override
     public String createConfirmationLink(User user) {
-        return Base64Utils.encodeToString((user.getPassword()+"|"+user.getEmail()+"|"+user.getId()).getBytes());
+        return Base64Utils.encodeToString((user.getPassword() + "|" + user.getEmail() + "|" + user.getId()).getBytes());
     }
 
     @Override
     public void publishMessage(User user) {
         userRepository.save(user);
-        System.out.println("User id: " + user.getId());
         publisher.publishMessage(user);
     }
 

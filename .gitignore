@@ -27,3 +27,4 @@ src/main/resources/mail.properties
 src/main/resources/static/img/
 src/test/java/com/example/ControllerTest/
 target/
+/.gitignore

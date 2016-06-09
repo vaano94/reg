@@ -1,6 +1,3 @@
-/**
- * Created by ivan on 02/06/16.
- */
 $(document).ready(function(){
     $("#signup_form_div").hide();
 

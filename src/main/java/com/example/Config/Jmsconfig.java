@@ -8,10 +8,18 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 
-import javax.jms.ConnectionFactory;
+/**
+ * Class for configuring JMS system.
+ */
 @Configuration
 public class Jmsconfig {
 
+    /**
+     * ActiveMQ connection factory configuration.
+     * Creates connection factory on localhost saying it's only persistent
+     * during app lifecycle
+     * @return instance of ActiveMQConnectionFactory
+     */
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(
@@ -20,6 +28,10 @@ public class Jmsconfig {
         return activeMQConnectionFactory;
     }
 
+    /**
+     * Defines SimpleJMSListenerContainerFactory.
+     * @return an instance of factory
+     */
     @Bean
     public JmsListenerContainerFactory<?> factory() {
         SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
@@ -27,6 +39,12 @@ public class Jmsconfig {
         return factory;
     }
 
+
+    /**
+     * Defines jmsTemplate with destination address.
+     * 'mailbox-destination' for current ActiveMQ configuration
+     * @return instance of jmsTempate
+     */
     @Bean
     public JmsTemplate jmsTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();

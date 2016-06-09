@@ -5,21 +5,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
 /**
- * Created by ivan on 05/06/16.
+ * ActiveMQ representation for sending messages.
  */
 @Component
 public class Publisher {
-
+    /**
+     * Autowired JmsTemplate.
+     */
     @Autowired
     private JmsTemplate jmsTemplate;
 
+    /**
+     * Publishes current User for further action to ActiveMQ receiver.
+     * @param user User user
+     */
     public void publishMessage(User user) {
 
         MessageCreator messageCreator = new MessageCreator() {
@@ -29,8 +34,6 @@ public class Publisher {
             }
         };
 
-        //  JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
-        System.out.println("Sending user over to email-sender");
         jmsTemplate.send("mailbox-destination", messageCreator);
     }
 

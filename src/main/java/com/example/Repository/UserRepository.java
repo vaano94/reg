@@ -6,11 +6,16 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Created by ivan on 03/06/16.
+ * User repository interface which reacts with Spring Data JPA.
  */
 public interface UserRepository extends CrudRepository<User, Integer> {
 
+    /**
+     * Method to find user by email.
+     * @param email String email
+     * @return User user
+     */
     @Query("SELECT u from User u where u.email = :email")
-    public User findUserByEmail(@Param("email")String email);
+    User findUserByEmail(@Param("email") String email);
 
 }
