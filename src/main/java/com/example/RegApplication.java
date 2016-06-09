@@ -1,7 +1,6 @@
 package com.example;
 
 import java.io.File;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,20 +12,14 @@ import org.springframework.util.FileSystemUtils;
 @SpringBootApplication
 @EnableJms
 public class RegApplication {
-
-
-	/**
-	 * Main entry point of application.
-	 * @param args params
+     /**
+     * Main entry point of application.
+     * @param args String parameters
      */
-	public static void main(String[] args) {
-		// Clean out any ActiveMQ data from a previous run
-		FileSystemUtils.deleteRecursively(new File("activemq-data"));
-		// Launch the application
-		ConfigurableApplicationContext context = SpringApplication.run(RegApplication.class, args);
-
-
-	}
-
-
+     public static void main(String[] args) {
+     // Clean out any ActiveMQ data from a previous run
+     FileSystemUtils.deleteRecursively(new File("activemq-data"));
+     // Launch the application
+     ConfigurableApplicationContext context = SpringApplication.run(RegApplication.class, args);
+     }
 }

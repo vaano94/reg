@@ -7,8 +7,10 @@ import java.io.Serializable;
  */
 public class MailMessage implements Serializable {
 
+    /**
+     * Serial id.
+     */
     private static final long serialVersionUID = -3679304901044035566L;
-
     /**
      * Author email.
      */
