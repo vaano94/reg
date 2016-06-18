@@ -58,8 +58,8 @@ public class SendHTMLEmail {
         } catch (IOException e) {
             System.out.println("Could not load properties file");
         }
-        String username = prop.getProperty("login");
-        String password = prop.getProperty("password");
+        final String username = prop.getProperty("login");
+        final String password = prop.getProperty("password");
 
         String host = "smtp.gmail.com";
 
