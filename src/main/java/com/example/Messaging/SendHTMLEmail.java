@@ -10,6 +10,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -32,7 +33,10 @@ public class SendHTMLEmail {
      * inputStream to read properties file.
      */
     private static InputStream input = null;
-
+    /**
+     * Properties file with email sending credentials.
+     */
+    private static final String PROP_NAME = "mail.properties";
     /**
      * Main method responsible for sending a message.
      * Requires user and mail
@@ -48,13 +52,7 @@ public class SendHTMLEmail {
         String author = message.getAuthor();
 
         Properties prop = new Properties();
-        String filename = "mail.properties";
-        input = RegApplication.class.getClassLoader().getResourceAsStream(filename);
-        if (input == null) {
-            System.out.println("Sorry, unable to find " + filename);
-            return;
-        }
-
+        input = RegApplication.class.getClassLoader().getResourceAsStream(PROP_NAME);
         try {
             prop.load(input);
         } catch (IOException e) {
@@ -85,9 +83,9 @@ public class SendHTMLEmail {
 
             // Set From: header field of the header.
             try {
-                mail.setFrom(new InternetAddress(author));
-            } catch (MessagingException e) {
-                e.printStackTrace();
+                mail.setFrom(new InternetAddress(author, true));
+            } catch (AddressException e) {
+                System.out.println("Could not parse autor address :" + e.getMessage());
             }
 
             // Set To: header field of the header.

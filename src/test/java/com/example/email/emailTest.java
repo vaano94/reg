@@ -11,6 +11,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.mail.MessagingException;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = RegApplication.class)
 @WebAppConfiguration
@@ -34,5 +36,22 @@ public class emailTest {
 
     }
 
+    @Test(expected = NullPointerException.class)
+    public void EmailSentWithNullUserTest()
+    {
+        User user = null;
+        MailMessage mailMessage = new MailMessage ();
+        mailMessage.setAuthor (user.getEmail ());
+        sender.sendMessage (mailMessage,user);
+    }
+
+    /*@Test(expected = MessagingException.class)
+    public void EmailSentWithWrongUserTest() {
+        User user = new User ();
+        MailMessage mailMessage = new MailMessage ();
+        mailMessage.setRecipient("abc@mail.com");
+        mailMessage.setAuthor("");
+        sender.sendMessage (mailMessage,user);
+    }*/
 
 }
