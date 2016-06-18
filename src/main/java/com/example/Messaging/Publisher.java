@@ -24,17 +24,15 @@ public class Publisher {
      * Publishes current User for further action to ActiveMQ receiver.
      * @param user User user
      */
-    public void publishMessage(User user) {
+    public void publishMessage(final User user) {
         MessageCreator messageCreator = new MessageCreator() {
-            private final User finalUser = user;
             @Override
             public Message createMessage(Session session) throws JMSException {
-                return session.createObjectMessage(finalUser);
+                return session.createObjectMessage(user);
             }
         };
 
         jmsTemplate.send("mailbox-destination", messageCreator);
     }
-
 
 }
