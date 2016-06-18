@@ -26,9 +26,9 @@ public class Publisher {
      */
     public void publishMessage(User user) {
         MessageCreator messageCreator = new MessageCreator() {
+            private final User finalUser = user;
             @Override
             public Message createMessage(Session session) throws JMSException {
-                final User finalUser = user;
                 return session.createObjectMessage(finalUser);
             }
         };
