@@ -41,14 +41,14 @@ public class emailTest {
 
     }
 
-    /*@Test(expected = NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void EmailSentWithNullUserTest()
     {
         User user = null;
         MailMessage mailMessage = new MailMessage ();
         mailMessage.setAuthor (user.getEmail ());
         sender.sendMessage (mailMessage,user);
-    }*/
+    }
 
     /*@Test(expected = MessagingException.class)
     public void EmailSentWithWrongUserTest() {
